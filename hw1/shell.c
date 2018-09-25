@@ -7,12 +7,7 @@
 #define MAXLINE 80
 #define DEBUG false
 
-void appendToStr(char* s, char c)
-{
-    char withNewline[1] = {c};
-    strcat(s, withNewline);
-}
-
+// Splits a string of arguments into an array of strings
 void split(char* source, char* dest[], char* delim)
 {
     char* t = strtok(source, delim);
@@ -31,7 +26,7 @@ int main()
     bool shouldRun = true;
 
     printf("CS149 Shell from Greg Brisebois\n");
-
+    
     while(shouldRun)
     {
         printf("Greg-004> ");
@@ -87,6 +82,7 @@ int main()
                 if(DEBUG) printf("@  This is the parent %d\n", pid);
                 int status = 0;
                 
+                // Wait for child process
                 if(!ampersand) {
                     waitpid(pid, &status, 0);
                 }
@@ -96,11 +92,13 @@ int main()
                 shouldRun = false;
                 
                 if(ampersand) {
+                    // Redirect stdout to devnull
                     freopen("/dev/null", "w", stdout);
                 }
                 
                 if(DEBUG) printf("@  This is the child %d\n", pid);
                 
+                // Start new process
                 __pid_t cmdPid = execvp(args[0], args);
                 
                 if(DEBUG) printf("@  Command PID %d\n", cmdPid);
